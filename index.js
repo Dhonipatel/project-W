@@ -4,6 +4,7 @@ const path = require("path");
 const Chat = require("./models/chat.js");
 const { render } = require("ejs");
 const { log } = require("console");
+const ExpressError = require("./ExpressError")
 
 const app = express();
 
@@ -75,6 +76,13 @@ app.get("/chats/:id/edit", async (req, res) => {
 app.get("/", (req, res) =>  {
   res.send("root is working");
   
+});
+
+// ERROR HANDLING MIDDLEWARES 
+
+app.use( "/", (err, req, next) => {
+  let {status = 500, message = "Some Error Occured" } = err;
+  res.status(status).send(message);
 });
 
 app.listen(8080, () => {
