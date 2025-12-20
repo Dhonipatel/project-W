@@ -35,6 +35,7 @@ app.get("/Chats", async(req, res) => {
 
 // NEW ROUTE
 app.get("/chats/new", (req, res) => {
+  throw new ExpressError(404, "page not found");
   res.render("new.ejs")
 
 });
@@ -60,6 +61,9 @@ app.post("/chats", async(req, res, next) => {
  app.get("/chats/:id", async (req, res, next) => {
   let { id } = req.params;
   let chat = await chat.findById(id);
+  if (!chat) {
+    throw new ExpressError(404, "chat not found");
+  }
   res.render("edit.js", {chat});
  });
 
@@ -69,7 +73,7 @@ app.post("/chats", async(req, res, next) => {
 app.get("/chats/:id/edit", async (req, res) => {
   let {id} = req.params;
   let chat = await Chat.findById(id);
-  res.render("edit.ejs", {chat});
+  res.render("edit.js", {chat});
 });
 
 
